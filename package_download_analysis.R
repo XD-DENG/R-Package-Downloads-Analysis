@@ -2,18 +2,18 @@
 # data source: http://cran-logs.rstudio.com/
 
 library(RCurl)
+library(rworldmap,quietly = TRUE)
 
-pacakge_name <- "ggplot2"
+pacakge_name <- "Rtts"
 
 
 # tmp_file_location <- "/home/xiaodong/Downloads/temp_file.csv.gz"
 # tmp_data_location <- "/home/xiaodong/Downloads/temp_file.csv"
 tmp_file_location <- paste(getwd(),"/temp_file.csv.gz", sep="")
-tmp_data_location <- paste(getwd(),"/temp_file.csv", sep="")
 
 
 start <- as.Date('2015-05-26')
-today <- as.Date('2015-05-27')
+today <- as.Date('2015-06-18')
 
 all_days <- seq(start, today, by = 'day')
 
@@ -26,11 +26,10 @@ for(i in 1:length(urls)){
   print(all_days[i])
   if(url.exists(urls[i])==TRUE){
     download.file(urls[i], destfile = tmp_file_location)
-    system(command = paste("gunzip", tmp_file_location))
-    tmp_data <- read.csv(tmp_data_location)
+    tmp_data <- read.csv(gzfile(tmp_file_location))
     tmp_data <- subset(tmp_data, tmp_data$package==pacakge_name)
     data_collection <- rbind(data_collection, tmp_data)
-    file.remove(tmp_data_location)
+    file.remove(tmp_file_location)
   }else{
     cat("The data on this date is not available.\n\n")
   }
@@ -92,8 +91,7 @@ pie_plot_os <- function(){
 
 
 # map plot for country
-library(rworldmap,quietly = TRUE)
-country_mapping <- read.csv("/home/xiaodong/R/package_download_analysis/country_mapping.csv")
+country_mapping <- read.csv(paste(getwd(),"/country_mapping.csv", sep=""))
 data_pie_country <- rev(sort(table(as.character(data_collection$country))))
 # country_list <- unique(names(data_pie_country))
 # country_name_list <- country_mapping$Country.name[country_mapping$Code %in% country_list]
