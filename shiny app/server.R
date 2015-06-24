@@ -59,7 +59,7 @@ shinyServer(function(input, output) {
   # pie plot for country
   pie_plot_country <- function(){
     num_to_display <- 5
-    data_collection <- data_collect()
+    data_collection <- dat()
     data_collection <- subset(data_collection, package==input$package_name)
     data_pie_country <- rev(sort(table(data_collection$country)))
     if(length(unique(data_collection$country))>num_to_display){
@@ -74,7 +74,7 @@ shinyServer(function(input, output) {
   # pie plot for version
   pie_plot_version <- function(){
     num_to_display <- 5
-    data_collection <- data_collect()
+    data_collection <- dat()
     data_collection <- subset(data_collection, package==input$package_name)
     data_pie_version <- rev(sort(table(as.character(data_collection$version))))
     
@@ -90,7 +90,7 @@ shinyServer(function(input, output) {
   #pie plot for r version
   pie_plot_r_version <- function(){
     num_to_display <- 5
-    data_collection <- data_collect()
+    data_collection <- dat()
     data_collection <- subset(data_collection, package==input$package_name)
     data_pie_r_version <- rev(sort(table(as.character(data_collection$r_version))))
     
@@ -104,12 +104,16 @@ shinyServer(function(input, output) {
   }
   
   
+  # global data setting --------------------
   
+  # by using reactive(), I can have the data I desired as a global object.
+  # so that I need to run data_collect() for only once.
+  dat <- reactive(data_collect())
   
   # UI Definitions ----------------------------------------------------------
   
   output$contents <- renderTable({
-    temp <- data_collect()
+    temp <- dat()
     print(names(temp))
     if(identical(names(temp),c("date", "time", "size", "r_version", "r_arch",
                       "r_os", "package", "version", "country", "ip_id"))){
@@ -131,7 +135,7 @@ shinyServer(function(input, output) {
   
 
   output$map_plot <- renderPlot({
-    data_collection <- data_collect()
+    data_collection <- dat()
     data_collection <- subset(data_collection, package==input$package_name)
     # map plot for country
     country_mapping <- read.csv("www/country_mapping.csv")
@@ -172,7 +176,7 @@ shinyServer(function(input, output) {
   })
   
   output$package_name_check <- renderText({
-    package_list <- unique(data_collect()$package)
+    package_list <- unique(dat()$package)
     if(input$package_name %in% package_list){
       paste("'", input$package_name, "' detected in the data.", sep="")
     }else{
