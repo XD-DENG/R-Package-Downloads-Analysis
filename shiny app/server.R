@@ -16,12 +16,12 @@ shinyServer(function(input, output) {
 
   # functions ---------------------------------------------------------------
   
-  data_collec_internet <- function(start_date, end_date){
+  data_collect_internet <- function(start_date, end_date){
     tmp_file_location <- paste(getwd(),"/temp_file.csv.gz", sep="")
     
     
-    start <- as.Date('2015-05-26')
-    today <- as.Date('2015-06-18')
+    start <- as.Date(start_date)
+    today <- as.Date(end_date)
     
     all_days <- seq(start, today, by = 'day')
     
