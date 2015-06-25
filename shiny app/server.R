@@ -202,10 +202,22 @@ shinyServer(function(input, output) {
   })
   
   output$country_distribution <- renderDataTable({
+#     country_mapping <- read.csv("www/country_mapping.csv")   # "Code", "Country.name"
+#     tmp <- dat()
+#     tmp <- subset(tmp, tmp$package==input$package_name)
+#     temp_table <- table(as.vector(tmp$country))
+#     temp_table <- data.frame(temp_table)
+#     temp_table[,1] <- as.character(temp_table[,1])
+#     #replace the country code with country name
+#     for(i in 1:dim(temp_table)[1]){
+#       temp_table[i,1] <- as.character(country_mapping$Country.name)[country_mapping$Code==temp_table[i,1]][1]
+#     }
+#     temp_table
     tmp <- dat()
     tmp <- subset(tmp, tmp$package==input$package_name)
     temp_table <- table(as.vector(tmp$country))
-    data.frame(temp_table)
+    temp_table <- data.frame(temp_table)
+    temp_table
   })
-
+  
 })
