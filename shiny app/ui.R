@@ -15,16 +15,17 @@ shinyUI(navbarPage("R Package Download Analysis",
                             img(src="blacksmith.png", height = 100, width = 100),
                             "By Xiaodong"),
                    
-                   navbarMenu("Prepare Data",
-
-                     tabPanel("Load data",
-                              fluidPage(
-                                sidebarLayout(
-                                  sidebarPanel(
-                                    fileInput('file1', 'Choose file to upload',
-                                              accept = c(
-                                                'text/csv',
-                                                'text/comma-separated-values',
+                   # the navigation bar to obtain data
+                   navbarMenu("Prepare Data",                 
+                              # load data by uploading csv files.
+                              tabPanel("Load data",
+                                       fluidPage(
+                                         sidebarLayout(
+                                           sidebarPanel(
+                                             fileInput('file1', 'Choose file to upload',
+                                                       accept = c(
+                                                         'text/csv',
+                                                         'text/comma-separated-values',
                                                 'text/tab-separated-values',
                                                 'text/plain',
                                                 '.csv',
@@ -32,17 +33,10 @@ shinyUI(navbarPage("R Package Download Analysis",
                                               )
                                     ),
                                     tags$hr(),
-                                    checkboxInput('header', 'Header', TRUE),
-                                    radioButtons('sep', 'Separator',
-                                                 c(Comma=',',
-                                                   Semicolon=';',
-                                                   Tab='\t'),
-                                                 ','),
-                                    radioButtons('quote', 'Quote',
-                                                 c(None='',
-                                                   'Double Quote'='"',
-                                                   'Single Quote'="'"),
-                                                 '"')
+                                    h5("Please use the csv or csv.gz file downloaded from"),
+                                    h5("http://cran-logs.rstudio.com/"),
+                                    h5("and don't make any change to the data.")
+                                       
                                   ),
                                   
                                     tableOutput("contents")
@@ -50,16 +44,20 @@ shinyUI(navbarPage("R Package Download Analysis",
                                 )
                               )
                      ),
-
+                      # get data by downloading from CRAN-log
                      tabPanel("Download from CRAN",
                              
                                     dateInput("start_date","The starting date:",value = Sys.Date()),
                                     dateInput("end_date","The ending date:",value = Sys.Date()),
                                     br(),
                                     h5("The date range you selected is:"),
-                                    textOutput("show_date_range")
+                                    textOutput("show_date_range"),
+                                    actionButton("start_download", "Download")
                                 )
                    ),
+                   
+                   # selecting the package name that we want to analyze. 
+                   # May add other features in this part later
                    navbarMenu("Selecting & Setting",
                               
                               tabPanel("Select the package",
@@ -77,6 +75,8 @@ shinyUI(navbarPage("R Package Download Analysis",
                               
                               
                               ),
+                   
+                   # this part is to begin analysis
                    navbarMenu("Analysis",
                               tabPanel("Simple Analysis",
                                        plotOutput("pie_plot")),

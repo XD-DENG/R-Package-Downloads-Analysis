@@ -35,7 +35,6 @@ shinyServer(function(input, output) {
       if(url.exists(urls[i])==TRUE){
         download.file(urls[i], destfile = tmp_file_location)
         tmp_data <- read.csv(gzfile(tmp_file_location))
-        tmp_data <- subset(tmp_data, tmp_data$package==pacakge_name)
         data_collection <- rbind(data_collection, tmp_data)
         file.remove(tmp_file_location)
       }else{
@@ -45,14 +44,15 @@ shinyServer(function(input, output) {
     return(data_collection)
   }
   
+  # this function help collect data from the file uploaded
   data_collect <- function(){
     inFile <- input$file1
     
     if (is.null(inFile))
       return(NULL)
     
-    contents <- read.csv(inFile$datapath, header = input$header,
-                         sep = input$sep, quote = input$quote)
+    contents <- read.csv(inFile$datapath, header = TRUE,
+                         sep = ",", quote = '"')
     return(contents)
   }
   
@@ -104,14 +104,20 @@ shinyServer(function(input, output) {
   }
   
   
-  # global data setting --------------------
+  # global data setting ----------------------------------------------
   
   # by using reactive(), I can have the data I desired as a global object.
   # so that I need to run data_collect() for only once.
   dat <- reactive(data_collect())
   
+  dat_1 <- eventReactive(input$start_download, {
+    #your action
+    data_collect_internet(input$start_date, input$end_date)
+  })
+  
   # UI Definitions ----------------------------------------------------------
   
+  # this helps show the example from the data obtained
   output$contents <- renderTable({
     temp <- dat()
     print(names(temp))
@@ -133,7 +139,7 @@ shinyServer(function(input, output) {
       
   })
   
-
+  # plot the distributions of downloads on map
   output$map_plot <- renderPlot({
     data_collection <- dat()
     data_collection <- subset(data_collection, package==input$package_name)
@@ -167,14 +173,17 @@ shinyServer(function(input, output) {
                landCol = "wheat")
   })
   
+  # show the range of dates selected for downloading
   output$show_date_range <- renderText({
     paste(as.character(input$start_date), as.character(input$end_date), sep=" to ")
   })
-
+  
+  # return the package name selected
   output$package_name <- renderText({
     input$package_name
   })
   
+  # check if the package name selected is in the data obtained
   output$package_name_check <- renderText({
     package_list <- unique(dat()$package)
     if(input$package_name %in% package_list){
