@@ -192,5 +192,20 @@ shinyServer(function(input, output) {
       paste("'", input$package_name, "' NOT detected in the data.", sep="")
     }
   })
+  
+  output$download_summary <- renderDataTable({
+    tmp <- dat()
+    tmp <- subset(tmp, tmp$package==input$package_name)
+    
+    index <- c("Total.Downloads", "Number.of.Country")
+    tmp <- data.frame("Index"=index, "Number"=c(dim(tmp)[1], length(unique(tmp$country))))
+  })
+  
+  output$country_distribution <- renderDataTable({
+    tmp <- dat()
+    tmp <- subset(tmp, tmp$package==input$package_name)
+    temp_table <- table(as.vector(tmp$country))
+    data.frame(temp_table)
+  })
 
 })

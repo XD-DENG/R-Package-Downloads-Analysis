@@ -81,7 +81,13 @@ shinyUI(navbarPage("R Package Download Analysis",
                               tabPanel("Simple Analysis",
                                        plotOutput("pie_plot")),
                               tabPanel("See on Map",
-                                       plotOutput("map_plot"))
+                                       plotOutput("map_plot")),
+                              tabPanel("Download Summary",
+                                       h3("Key Numbers"),
+                                       dataTableOutput("download_summary"),
+                                       br(),
+                                       h3("Country Distribution"),
+                                       dataTableOutput("country_distribution"))
                               )
                    
 
