@@ -53,7 +53,11 @@ shinyUI(navbarPage("R Package Download Analysis",
                                     h5("The date range you selected is:"),
                                     textOutput("show_date_range"),
                                     actionButton("start_download", "Download"),
-                                    tableOutput("dat_CRAN")
+                                    h4("Head of downloaded data:"),
+                                    tableOutput("dat_CRAN_head"),
+                                    br(),
+                                    h4("Tail of downloaded data:"),
+                                    tableOutput("dat_CRAN_tail")
                               
                                 )
                    ),
@@ -61,8 +65,12 @@ shinyUI(navbarPage("R Package Download Analysis",
                    # selecting the package name that we want to analyze. 
                    # May add other features in this part later
                    navbarMenu("Selecting & Setting",
-                              
-                              tabPanel("Select the package",
+                              tabPanel("Select Data Source",
+                                       selectInput("data_source",label = "Choose Data Source",
+                                                   choices = list("Uploaded Data"="uploaded",
+                                                     "Downloaed Data"="dowloaded"),
+                                                   selected = "uploaded")),
+                              tabPanel("Select the Package",
                                        textInput("package_name",
                                                  label = "Please enter the name of the package that you're interested in:"),
                                        br(),

@@ -108,14 +108,19 @@ shinyServer(function(input, output) {
   
   # by using reactive(), I can have the data I desired as a global object.
   # so that I need to run data_collect() for only once.
-  dat <- reactive(data_collect())
+  
+  #dat <- reactive(dat_uploaded())
+  
+  
+  dat_uploaded <- reactive(data_collect())
   
   
   # following part is for downloading test
   # test if can directly download data from CRAN
-  output$dat_CRAN <- renderTable(head(dat_download()))
+  output$dat_CRAN_head <- renderTable(head(dat_downloaded()))
+  output$dat_CRAN_tail <- renderTable(tail(dat_downloaded()))
   
-  dat_download <- eventReactive(input$start_download, {
+  dat_downloaded <- eventReactive(input$start_download, {
     #your action
 #     tmp <- dat()
 #     head(tmp)
@@ -126,6 +131,14 @@ shinyServer(function(input, output) {
     tmp <- data_collect_internet(input$start_date, input$end_date)
     tmp
   })
+  
+  dat <- reactive(
+    if(input$data_source=="uploaded"){
+      dat_uploaded()
+    }else{
+      dat_downloaded()
+    }
+  )
   
   # UI Definitions ----------------------------------------------------------
   
