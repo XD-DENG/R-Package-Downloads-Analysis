@@ -52,7 +52,9 @@ shinyUI(navbarPage("R Package Download Analysis",
                                     br(),
                                     h5("The date range you selected is:"),
                                     textOutput("show_date_range"),
-                                    actionButton("start_download", "Download")
+                                    actionButton("start_download", "Download"),
+                                    tableOutput("dat_CRAN")
+                              
                                 )
                    ),
                    

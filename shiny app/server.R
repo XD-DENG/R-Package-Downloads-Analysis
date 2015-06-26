@@ -110,9 +110,21 @@ shinyServer(function(input, output) {
   # so that I need to run data_collect() for only once.
   dat <- reactive(data_collect())
   
-  dat_1 <- eventReactive(input$start_download, {
+  
+  # following part is for downloading test
+  # test if can directly download data from CRAN
+  output$dat_CRAN <- renderTable(head(dat_download()))
+  
+  dat_download <- eventReactive(input$start_download, {
     #your action
-    data_collect_internet(input$start_date, input$end_date)
+#     tmp <- dat()
+#     head(tmp)
+#     test_url <- "http://cran-logs.rstudio.com/2015/2015-06-24.csv.gz"
+#     download.file(test_url, destfile = "test.csv.gz")
+#     tmp_data <- read.csv(gzfile("test.csv.gz"))
+#     head(tmp_data)
+    tmp <- data_collect_internet(input$start_date, input$end_date)
+    tmp
   })
   
   # UI Definitions ----------------------------------------------------------
