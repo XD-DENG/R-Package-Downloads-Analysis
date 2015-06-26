@@ -146,14 +146,7 @@ shinyServer(function(input, output) {
   # this helps show the example from the data obtained
   output$contents <- renderDataTable({
     temp <- dat_uploaded()
-    print(names(temp))
-    if(identical(names(temp),c("date", "time", "size", "r_version", "r_arch",
-                      "r_os", "package", "version", "country", "ip_id"))){
-      head(temp)
-    }else{
-      data.frame("Possible Issue"=c("No data uploaded", "The dataset structure doesn't meet requirement."))
-    }
-    
+    temp
   })
   
   output$pie_plot <- renderPlot({
