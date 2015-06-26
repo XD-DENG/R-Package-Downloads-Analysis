@@ -39,26 +39,26 @@ shinyUI(navbarPage("R Package Download Analysis",
                                        
                                   ),
                                   
-                                    tableOutput("contents")
+                                    dataTableOutput("contents")
                                   
                                 )
                               )
                      ),
                       # get data by downloading from CRAN-log
                      tabPanel("Download from CRAN",
+                              column(4,
                              
                                     dateInput("start_date","The starting date:",value = Sys.Date()),
                                     dateInput("end_date","The ending date:",value = Sys.Date()),
                                     br(),
                                     h5("The date range you selected is:"),
                                     textOutput("show_date_range"),
-                                    actionButton("start_download", "Download"),
-                                    h4("Head of downloaded data:"),
-                                    tableOutput("dat_CRAN_head"),
                                     br(),
-                                    h4("Tail of downloaded data:"),
-                                    tableOutput("dat_CRAN_tail")
-                              
+                                    actionButton("start_download", "Download")),
+                              column(6,
+                                    h3("Data Downloaded:"),
+                                    dataTableOutput("dat_downloaded_show")
+                              )
                                 )
                    ),
                    

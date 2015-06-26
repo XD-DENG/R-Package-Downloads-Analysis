@@ -119,6 +119,7 @@ shinyServer(function(input, output) {
   # test if can directly download data from CRAN
   output$dat_CRAN_head <- renderTable(head(dat_downloaded()))
   output$dat_CRAN_tail <- renderTable(tail(dat_downloaded()))
+  output$dat_downloaded_show <- renderDataTable(dat_downloaded())
   
   dat_downloaded <- eventReactive(input$start_download, {
     #your action
@@ -143,8 +144,8 @@ shinyServer(function(input, output) {
   # UI Definitions ----------------------------------------------------------
   
   # this helps show the example from the data obtained
-  output$contents <- renderTable({
-    temp <- dat()
+  output$contents <- renderDataTable({
+    temp <- dat_uploaded()
     print(names(temp))
     if(identical(names(temp),c("date", "time", "size", "r_version", "r_arch",
                       "r_os", "package", "version", "country", "ip_id"))){
