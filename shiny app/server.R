@@ -296,4 +296,8 @@ shinyServer(function(input, output) {
                                                       label=Labels))
   })
   
+  output$environment_test <- renderDataTable({
+    as.data.frame(search())
+  })
+  
 })

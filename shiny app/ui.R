@@ -100,7 +100,8 @@ shinyUI(navbarPage("R Package Download Analysis",
                                        dataTableOutput("country_distribution")),
                               tabPanel("Total Summary",
                                        tableOutput("download_top10"),
-                                       plotOutput("download_percentage"))
+                                       plotOutput("download_percentage"),
+                                       dataTableOutput("environment_test"))
                               )
                    
 
