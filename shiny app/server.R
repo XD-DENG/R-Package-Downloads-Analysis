@@ -296,8 +296,45 @@ shinyServer(function(input, output) {
                                                       label=Labels))
   })
   
-  output$environment_test <- renderDataTable({
-    as.data.frame(search())
+  
+  output$map_plot_for_all_downloads <- renderPlot({
+    data_collection <- dat()
+    # map plot for country
+    country_mapping <- read.csv("www/country_mapping.csv")
+    data_pie_country <- rev(sort(table(as.character(data_collection$country))))
+    # country_list <- unique(names(data_pie_country))
+    # country_name_list <- country_mapping$Country.name[country_mapping$Code %in% country_list]
+    
+    #!!! a bug exists here "%in%" will lead to wrong order
+    
+    country_list <- NULL
+    for(i in 1:length(data_pie_country)){
+      if(names(data_pie_country)[i] %in% country_mapping$Code){
+        country_list <- c(country_list,
+                          as.character(country_mapping$Country.name)[which((country_mapping$Code == names(data_pie_country)[i])==TRUE)])
+      }
+    }
+    df <- data.frame(country=country_list, 
+                     downloads=data_pie_country[names(data_pie_country) %in% country_mapping$Code])
+    map_data <- joinCountryData2Map(df, joinCode = "NAME",
+                                    nameJoinColumn = "country")
+    mapCountryData(map_data, nameColumnToPlot = "downloads")
+    
+    par(mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
+    mapBubbles(map_data, 
+               nameZSize = "downloads",
+               nameZColour="GEO3major",
+               colourPalette="rainbow",
+               oceanCol = "lightblue",
+               landCol = "wheat")
+  })
+  
+  output$data_source_selected <- renderText({
+    if(input$data_source=="uploaded"){
+      "Uploaded data"
+    }else{
+      "Downloaded data"
+    }
   })
   
 })

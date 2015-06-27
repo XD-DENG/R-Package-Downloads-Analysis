@@ -59,17 +59,24 @@ shinyUI(navbarPage("R Package Download Analysis",
                                     h3("Data Downloaded:"),
                                     dataTableOutput("dat_downloaded_show")
                               )
-                                )
+                                ),
+                     tabPanel("Select Data Source",
+                              column(5,
+                              h5("You can select which data source to use,"),
+                              h5('"Uploaded data", or "Dowloaded data".'),
+                              br(),
+                              selectInput("data_source",label = "Choose Data Source",
+                                          choices = list("Uploaded Data"="uploaded",
+                                                         "Downloaed Data"="dowloaded"),
+                                          selected = "uploaded")),
+                              column(5,
+                                     h5("The data source you're using is:"),
+                                     h4(textOutput("data_source_selected"))))
                    ),
                    
                    # selecting the package name that we want to analyze. 
                    # May add other features in this part later
                    navbarMenu("Selecting & Setting",
-                              tabPanel("Select Data Source",
-                                       selectInput("data_source",label = "Choose Data Source",
-                                                   choices = list("Uploaded Data"="uploaded",
-                                                     "Downloaed Data"="dowloaded"),
-                                                   selected = "uploaded")),
                               tabPanel("Select the Package",
                                        textInput("package_name",
                                                  label = "Please enter the name of the package that you're interested in:"),
@@ -92,16 +99,20 @@ shinyUI(navbarPage("R Package Download Analysis",
                                        plotOutput("pie_plot")),
                               tabPanel("See on Map",
                                        plotOutput("map_plot")),
-                              tabPanel("Download Summary",
+                              tabPanel("Downloads Summary",
                                        h3("Key Numbers"),
                                        dataTableOutput("download_summary"),
                                        br(),
                                        h3("Country Distribution"),
                                        dataTableOutput("country_distribution")),
-                              tabPanel("Total Summary",
+                              tabPanel("Pareto Principle (80-20 rule)",
                                        tableOutput("download_top10"),
-                                       plotOutput("download_percentage"),
-                                       dataTableOutput("environment_test"))
+                                       br(),
+                                       h5("The following plot help us know that how many packages achieved most of the downloads"),
+                                       h5("e.g., (878, 80%) means the top 878 packages achived 80% of the downloads."),
+                                       plotOutput("download_percentage", width = 1000)),
+                              tabPanel("Map for All downloads",
+                                       plotOutput("map_plot_for_all_downloads"))
                               )
                    
 
