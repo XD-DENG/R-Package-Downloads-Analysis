@@ -239,4 +239,22 @@ shinyServer(function(input, output) {
     temp_table
   })
   
+  output$download_top10 <- renderTable({
+    n=10
+    tmp_0 <- dat()
+    tmp_1 <- table(tmp_0$package)
+    tmp_2 <- rev(sort(tmp_1))
+    tmp_3 <- tmp_2[1:n]
+    
+    result <- data.frame(PackageName = letters[1:n],
+                         DownloadNum = 1:n,
+                         Percentage = 1:n)
+    result$PackageName <- names(tmp_3)
+    result$DownloadNum <- tmp_3
+    result$Percentage <- paste(as.character(round((result$DownloadNum/dim(tmp_0)[1])*100,2)),"%")
+    
+    result
+    
+  })
+  
 })
