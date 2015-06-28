@@ -329,11 +329,34 @@ shinyServer(function(input, output) {
                landCol = "wheat")
   })
   
-  output$data_source_selected <- renderText({
+  
+  
+  # several modules below are to display the summary information of the data obtained
+  output$data_summary_data_source <- renderText({
     if(input$data_source=="uploaded"){
-      "Uploaded data"
+      tmp <- "Uploaded data"
     }else{
-      "Downloaded data"
+      tmp <- "Downloaded data"
+    }
+    paste("Source:", tmp)
+  })
+  
+  output$data_summmary_num_of_records <- renderText({
+    dat_tmp <- dat()
+    if(is.null(dim(dat_tmp))){
+      paste("Number of Records:", "0")
+    }else{
+      paste("Number of Records:", dim(dat_tmp)[1])
+    }
+  })
+  
+  output$data_summary_date_range <- renderText({
+    dat_tmp <- dat()
+    if(is.null(dim(dat_tmp))){
+      "Date Range: N.A."
+    }else{
+      date_range <- range(as.Date(dat_tmp$date))
+      paste("Date Range:", date_range[1], "to", date_range[2])
     }
   })
   

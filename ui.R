@@ -18,7 +18,7 @@ shinyUI(navbarPage("R Package Download Analysis",
                    # the navigation bar to obtain data
                    navbarMenu("Prepare Data",                 
                               # load data by uploading csv files.
-                              tabPanel("Load data",
+                              tabPanel("Upload data",
                                        fluidPage(
                                          sidebarLayout(
                                            sidebarPanel(
@@ -70,8 +70,11 @@ shinyUI(navbarPage("R Package Download Analysis",
                                                          "Downloaed Data"="dowloaded"),
                                           selected = "uploaded")),
                               column(5,
-                                     h5("The data source you're using is:"),
-                                     h4(textOutput("data_source_selected"))))
+                                     h3("Summary for Selected Data"),
+                                     h5(textOutput("data_summary_data_source")),
+                                     h5(textOutput("data_summmary_num_of_records")),
+                                     h5(textOutput("data_summary_date_range"))
+                                     ))
                    ),
                    
                    # selecting the package name that we want to analyze. 
