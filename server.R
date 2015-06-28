@@ -9,7 +9,9 @@ library(shiny)
 library(RCurl)
 library(rworldmap,quietly = TRUE)
 
+#this line is setting the maximum size of the file which is going to be uploaded by user.
 options(shiny.maxRequestSize=50*1024^2) 
+
 
 shinyServer(function(input, output) {
   

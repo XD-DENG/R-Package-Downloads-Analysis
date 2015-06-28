@@ -26,10 +26,10 @@ shinyUI(navbarPage("R Package Download Analysis",
                                                        accept = c(
                                                          'text/csv',
                                                          'text/comma-separated-values',
-                                                'text/tab-separated-values',
-                                                'text/plain',
-                                                '.csv',
-                                                '.tsv'
+                                                         'text/tab-separated-values',
+                                                         'text/plain',
+                                                         '.csv',
+                                                         '.tsv'
                                               )
                                     ),
                                     tags$hr(),
@@ -71,49 +71,52 @@ shinyUI(navbarPage("R Package Download Analysis",
                                           selected = "uploaded")),
                               column(5,
                                      h3("Summary for Selected Data"),
+                                     br(),
                                      h5(textOutput("data_summary_data_source")),
                                      h5(textOutput("data_summmary_num_of_records")),
                                      h5(textOutput("data_summary_date_range"))
                                      ))
                    ),
                    
-                   # selecting the package name that we want to analyze. 
-                   # May add other features in this part later
-                   navbarMenu("Selecting & Setting",
-                              tabPanel("Select the Package",
+                   # this part is to begin analysis
+                   navbarMenu("Analysis",
+                              tabPanel("Simple Analysis",
+                                       plotOutput("pie_plot")),
+                              tabPanel("See on Map",
                                        textInput("package_name",
                                                  label = "Please enter the name of the package that you're interested in:"),
-                                       br(),
                                        h4("The package you're going to analyze is:"),
                                        h3(textOutput("package_name")),
                                        br(),
                                        textOutput("package_name_check"),
                                        br(),
                                        h5("Please note that the capitalization is important"),
-                                       h5("For example, 'rtts' while real name is 'Rtts' will cause error.")
-                                       )
-                              
-                              
-                              ),
-                   
-                   # this part is to begin analysis
-                   navbarMenu("Analysis",
-                              tabPanel("Simple Analysis",
-                                       plotOutput("pie_plot")),
-                              tabPanel("See on Map",
+                                       h5("For example, 'rtts' while real name is 'Rtts' will cause error."),
                                        plotOutput("map_plot")),
                               tabPanel("Downloads Summary",
-                                       h3("Key Numbers"),
-                                       dataTableOutput("download_summary"),
-                                       br(),
-                                       h3("Country Distribution"),
-                                       dataTableOutput("country_distribution")),
+                                       column(4,
+                                              "I hope to add another selection modeul",
+                                              "so that I can select package for this module separately"
+                                              ),
+                                       column(6,
+                                              h3("Key Numbers"),
+                                              dataTableOutput("download_summary"),
+                                              br(),
+                                              h3("Country Distribution"),
+                                              dataTableOutput("country_distribution")
+                                              )
+                                       ),
                               tabPanel("Pareto Principle (80-20 rule)",
-                                       tableOutput("download_top10"),
-                                       br(),
-                                       h5("The following plot help us know that how many packages achieved most of the downloads"),
-                                       h5("e.g., (878, 80%) means the top 878 packages achived 80% of the downloads."),
-                                       plotOutput("download_percentage", width = 1000)),
+                                       column(4,
+                                              h4("Top 10 Packages in the data obtained"),
+                                              tableOutput("download_top10")),
+                                       
+                                       column(5,
+                                              h5("The following plot help us know that how many packages achieved most of the downloads"),
+                                              h5("e.g., (878, 80%) means the top 878 packages achived 80% of the downloads."),
+                                              plotOutput("download_percentage", width = 1000)
+                                              )
+                                       ),
                               tabPanel("Map for All downloads",
                                        plotOutput("map_plot_for_all_downloads"))
                               )
