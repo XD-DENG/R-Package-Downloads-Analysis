@@ -114,7 +114,7 @@ shinyUI(navbarPage("R Package Download Analysis",
                                        column(5,
                                               h5("The following plot help us know that how many packages achieved most of the downloads"),
                                               h5("e.g., (878, 80%) means the top 878 packages achived 80% of the downloads."),
-                                              plotOutput("download_percentage", width = 1000)
+                                              plotOutput("download_percentage", width = 800)
                                               )
                                        ),
                               tabPanel("Map for All downloads",
