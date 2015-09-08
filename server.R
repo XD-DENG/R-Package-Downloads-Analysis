@@ -58,52 +58,52 @@ shinyServer(function(input, output) {
     return(contents)
   }
   
-  # pie plot for country
-  pie_plot_country <- function(){
-    num_to_display <- 5
-    data_collection <- dat()
-    data_collection <- subset(data_collection, package==input$package_name)
-    data_pie_country <- rev(sort(table(data_collection$country)))
-    if(length(unique(data_collection$country))>num_to_display){
-      pie(c(data_pie_country[1:num_to_display],sum(data_pie_country[-(1:num_to_display)])),
-          labels = c(names(data_pie_country)[1:num_to_display], "Others"))
-    }else{
-      pie(data_pie_country, 
-          labels = names(data_pie_country))
-    }
-  }
-  
-  # pie plot for version
-  pie_plot_version <- function(){
-    num_to_display <- 5
-    data_collection <- dat()
-    data_collection <- subset(data_collection, package==input$package_name)
-    data_pie_version <- rev(sort(table(as.character(data_collection$version))))
-    
-    if(length(unique(data_collection$version))>num_to_display){
-      pie(c(data_pie_version[1:num_to_display],sum(data_pie_version[-(1:num_to_display)])),
-          labels = c(names(data_pie_version)[1:num_to_display], "Others"))
-    }else{
-      pie(data_pie_version, 
-          labels = names(data_pie_version))
-    }
-  }
-  
-  #pie plot for r version
-  pie_plot_r_version <- function(){
-    num_to_display <- 5
-    data_collection <- dat()
-    data_collection <- subset(data_collection, package==input$package_name)
-    data_pie_r_version <- rev(sort(table(as.character(data_collection$r_version))))
-    
-    if(length(unique(data_collection$r_version))>num_to_display){
-      pie(c(data_pie_r_version[1:num_to_display],sum(data_pie_r_version[-(1:num_to_display)])),
-          labels = c(names(data_pie_r_version)[1:num_to_display], "Others"))
-    }else{
-      pie(data_pie_r_version, 
-          labels = names(data_pie_r_version))
-    }
-  }
+#   # pie plot for country
+#   pie_plot_country <- function(){
+#     num_to_display <- 5
+#     data_collection <- dat()
+#     data_collection <- subset(data_collection, package==input$package_name)
+#     data_pie_country <- rev(sort(table(data_collection$country)))
+#     if(length(unique(data_collection$country))>num_to_display){
+#       pie(c(data_pie_country[1:num_to_display],sum(data_pie_country[-(1:num_to_display)])),
+#           labels = c(names(data_pie_country)[1:num_to_display], "Others"))
+#     }else{
+#       pie(data_pie_country, 
+#           labels = names(data_pie_country))
+#     }
+#   }
+#   
+#   # pie plot for version
+#   pie_plot_version <- function(){
+#     num_to_display <- 5
+#     data_collection <- dat()
+#     data_collection <- subset(data_collection, package==input$package_name)
+#     data_pie_version <- rev(sort(table(as.character(data_collection$version))))
+#     
+#     if(length(unique(data_collection$version))>num_to_display){
+#       pie(c(data_pie_version[1:num_to_display],sum(data_pie_version[-(1:num_to_display)])),
+#           labels = c(names(data_pie_version)[1:num_to_display], "Others"))
+#     }else{
+#       pie(data_pie_version, 
+#           labels = names(data_pie_version))
+#     }
+#   }
+#   
+#   #pie plot for r version
+#   pie_plot_r_version <- function(){
+#     num_to_display <- 5
+#     data_collection <- dat()
+#     data_collection <- subset(data_collection, package==input$package_name)
+#     data_pie_r_version <- rev(sort(table(as.character(data_collection$r_version))))
+#     
+#     if(length(unique(data_collection$r_version))>num_to_display){
+#       pie(c(data_pie_r_version[1:num_to_display],sum(data_pie_r_version[-(1:num_to_display)])),
+#           labels = c(names(data_pie_r_version)[1:num_to_display], "Others"))
+#     }else{
+#       pie(data_pie_r_version, 
+#           labels = names(data_pie_r_version))
+#     }
+#   }
   
   
   # global data setting ----------------------------------------------
@@ -151,14 +151,12 @@ shinyServer(function(input, output) {
     temp
   })
   
-  output$pie_plot <- renderPlot({
-    par(mfrow=c(3,1))
-    pie_plot_country()
-    pie_plot_version()
-    pie_plot_r_version()
-    
-      
-  })
+#   output$pie_plot <- renderPlot({
+#     par(mfrow=c(3,1))
+#     pie_plot_country()
+#     pie_plot_version()
+#     pie_plot_r_version()
+#   })
   
   # plot the distributions of downloads on map
   output$map_plot <- renderPlot({
@@ -223,23 +221,15 @@ shinyServer(function(input, output) {
   })
   
   output$country_distribution <- renderDataTable({
-#     country_mapping <- read.csv("www/country_mapping.csv")   # "Code", "Country.name"
-#     tmp <- dat()
-#     tmp <- subset(tmp, tmp$package==input$package_name)
-#     temp_table <- table(as.vector(tmp$country))
-#     temp_table <- data.frame(temp_table)
-#     temp_table[,1] <- as.character(temp_table[,1])
-#     #replace the country code with country name
-#     for(i in 1:dim(temp_table)[1]){
-#       temp_table[i,1] <- as.character(country_mapping$Country.name)[country_mapping$Code==temp_table[i,1]][1]
-#     }
-#     temp_table
     tmp <- dat()
     tmp <- subset(tmp, tmp$package==input$package_name)
     temp_table <- table(as.vector(tmp$country))
     temp_table <- data.frame(temp_table)
-    temp_table
-  })
+    names(temp_table) <- c("Country.Code", "Num.of.Downloads")
+    temp_table[rev(order(temp_table$Num.of.Downloads)),]
+  },
+  # here we can define how many lines to show on each page
+  options = list(lengthMenu = c(5, 30, 50), pageLength = 5))
   
   output$download_top10 <- renderTable({
     n=10
@@ -370,8 +360,8 @@ shinyServer(function(input, output) {
     tmp <- subset(tmp, tmp$package==input$package_name)
     temp_table <- table(as.vector(tmp$country))
     temp_table <- data.frame(temp_table)
-    names(temp_table) <- c("Country", "Downloads.Frequency")
-    temp_table[rev(order(temp_table$Downloads.Frequency)),]
+    names(temp_table) <- c("Country.Code", "Num.of.Downloads")
+    temp_table[rev(order(temp_table$Num.of.Downloads)),]
   })
   
   date_range <- reactive({

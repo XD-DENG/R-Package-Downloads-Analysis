@@ -80,9 +80,8 @@ shinyUI(navbarPage("R Package Download Analysis",
                    
                    # this part is to begin analysis
                    navbarMenu("Analysis",
-                              tabPanel("Simple Analysis",
-                                       plotOutput("pie_plot")),
-                              tabPanel("See on Map",
+                              
+                              tabPanel("Package Analysis",
                                        textInput("package_name",
                                                  label = "Please enter the name of the package that you're interested in:"),
                                        h4("The package you're going to analyze is:"),
@@ -92,24 +91,20 @@ shinyUI(navbarPage("R Package Download Analysis",
                                        br(),
                                        h5("Please note that the capitalization is important"),
                                        h5("For example, 'rtts' while real name is 'Rtts' will cause error."),
-                                       plotOutput("map_plot")),
-                              tabPanel("Downloads Summary",
-                                       column(4,
-                                              "Please select the package to analyze in 'See on Map' tab.",
-                                              " ",
-                                              "You can download the summary data here:",
-                                              downloadButton("download.summary", "Download Summary")       
-                                              ),
-                                       
-                                       column(6,
-                                              h3("Key Numbers"),
-                                              dataTableOutput("download_summary"),
-                                              br(),
-                                              h3("Country Distribution"),
-                                              dataTableOutput("country_distribution")
-                                              )
+                                       br(),
+                                       h3("Key Numbers"),
+                                       dataTableOutput("download_summary"),
+                                       br(),
+                                       h3("Country Distribution"),
+                                       dataTableOutput("country_distribution"),
+                                       downloadButton("download.summary", "Download Country Distribution Summary"),
+                                       br(),
+                                       br(),
+                                       plotOutput("map_plot")
                                        ),
+
                               tabPanel("Pareto Principle (80-20 rule)",
+                                       
                                        column(4,
                                               h4("Top 10 Packages in the data obtained"),
                                               tableOutput("download_top10")),
@@ -120,6 +115,7 @@ shinyUI(navbarPage("R Package Download Analysis",
                                               plotOutput("download_percentage", width = 800)
                                               )
                                        ),
+                              
                               tabPanel("Map for All downloads",
                                        plotOutput("map_plot_for_all_downloads"))
                               )
