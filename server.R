@@ -381,8 +381,14 @@ shinyServer(function(input, output) {
   })
   
   output$download.summary <- downloadHandler(
-    # filename = "Country.Distribution.csv",
-    filename = paste("Country.Distribution", date_range(),".csv", sep=""),
+    
+    # !!!note that the filename must be produced with a function if it's dynamical.
+    # if you don't produce it with a function, like below, then the filename can't be changed automatically
+    # filename = paste("Country.Distribution", date_range(),".csv", sep=""),
+    filename = function(){
+      paste("Country.Distribution", date_range(),".csv", sep="")
+      },
+    
     content = function(file) {
       write.csv(to.download(), file, row.names = FALSE)
     }
