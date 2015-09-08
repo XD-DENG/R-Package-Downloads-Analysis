@@ -362,4 +362,30 @@ shinyServer(function(input, output) {
     }
   })
   
+  # new function for downloading summary data
+  # reference: http://shiny.rstudio.com/articles/download.html
+  
+  to.download <- reactive({
+    tmp <- dat()
+    tmp <- subset(tmp, tmp$package==input$package_name)
+    temp_table <- table(as.vector(tmp$country))
+    temp_table <- data.frame(temp_table)
+    names(temp_table) <- c("Country", "Downloads.Frequency")
+    temp_table[rev(order(temp_table$Downloads.Frequency)),]
+  })
+  
+  date_range <- reactive({
+    dat_tmp <- dat()
+    date_range <- range(as.Date(dat_tmp$date))
+    paste(date_range[1], "to", date_range[2])
+  })
+  
+  output$download.summary <- downloadHandler(
+    # filename = "Country.Distribution.csv",
+    filename = paste("Country.Distribution", date_range(),".csv", sep=""),
+    content = function(file) {
+      write.csv(to.download(), file, row.names = FALSE)
+    }
+  )
+  
 })

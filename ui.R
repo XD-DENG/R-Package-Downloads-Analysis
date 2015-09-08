@@ -95,9 +95,12 @@ shinyUI(navbarPage("R Package Download Analysis",
                                        plotOutput("map_plot")),
                               tabPanel("Downloads Summary",
                                        column(4,
-                                              "I hope to add another selection modeul",
-                                              "so that I can select package for this module separately"
+                                              "Please select the package to analyze in 'See on Map' tab.",
+                                              " ",
+                                              "You can download the summary data here:",
+                                              downloadButton("download.summary", "Download Summary")       
                                               ),
+                                       
                                        column(6,
                                               h3("Key Numbers"),
                                               dataTableOutput("download_summary"),
