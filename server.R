@@ -1,10 +1,4 @@
 
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
 library(shiny)
 library(RCurl)
 library(rworldmap,quietly = TRUE)
@@ -211,13 +205,21 @@ shinyServer(function(input, output) {
     }
   })
   
-  output$download_summary <- renderDataTable({
+  
+  output$package_download_num_of_country <- renderText({
     tmp <- dat()
     tmp <- subset(tmp, tmp$package==input$package_name)
-    
-    index <- c("Total.Downloads", "Number.of.Country")
-    tmp <- data.frame("Index"=index, "Number"=c(dim(tmp)[1], length(unique(tmp$country))))
+    tmp <- length(unique(tmp$country))
+    paste("Number of download countries: ", tmp, sep="")
   })
+  
+  output$package_download_num_of_downloads <- renderText({
+    tmp <- dat()
+    tmp <- subset(tmp, tmp$package==input$package_name)
+    tmp <- dim(tmp)[1]
+    paste("Number of downloads: ", tmp, sep="")
+  })
+  
   
   output$country_distribution <- renderDataTable({
     # I combined the lines below to reduce the memory usage
@@ -374,13 +376,17 @@ shinyServer(function(input, output) {
     paste(date_range[1], "to", date_range[2])
   })
   
+  package_name <- reactive({
+    input$package_name
+  })
+  
   output$download.summary <- downloadHandler(
     
     # !!!note that the filename must be produced with a function if it's dynamical.
     # if you don't produce it with a function, like below, then the filename can't be changed automatically
     # filename = paste("Country.Distribution", date_range(),".csv", sep=""),
     filename = function(){
-      paste("Country.Distribution", date_range(),".csv", sep="")
+      paste("Country.Distribution", date_range(),"_",package_name(),".csv", sep="")
       },
     
     content = function(file) {

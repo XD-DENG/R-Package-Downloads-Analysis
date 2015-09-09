@@ -1,10 +1,4 @@
 
-# This is the user-interface definition of a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
 library(shiny)
 
 shinyUI(navbarPage("R Package Download Analysis",
@@ -82,25 +76,34 @@ shinyUI(navbarPage("R Package Download Analysis",
                    navbarMenu("Analysis",
                               
                               tabPanel("Package Analysis",
-                                       textInput("package_name",
-                                                 label = "Please enter the name of the package that you're interested in:"),
-                                       h4("The package you're going to analyze is:"),
-                                       h3(textOutput("package_name")),
-                                       br(),
-                                       textOutput("package_name_check"),
-                                       br(),
-                                       h5("Please note that the capitalization is important"),
-                                       h5("For example, 'rtts' while real name is 'Rtts' will cause error."),
-                                       br(),
-                                       h3("Key Numbers"),
-                                       dataTableOutput("download_summary"),
-                                       br(),
-                                       h3("Country Distribution"),
-                                       dataTableOutput("country_distribution"),
-                                       downloadButton("download.summary", "Download Country Distribution Summary"),
-                                       br(),
-                                       br(),
-                                       plotOutput("map_plot")
+                                       fluidRow(
+                                         column(5,
+                                                textInput("package_name",
+                                                          label = "Please enter the name of the package that you're interested in:"),
+                                                h4("The package you're going to analyze is:"),
+                                                h3(textOutput("package_name")),
+                                                br(),
+                                                textOutput("package_name_check"),
+                                                br(),
+                                                h5("Please note that the capitalization is important"),
+                                                h5("For example, 'rtts' while real name is 'Rtts' will cause error.")
+                                                ),
+                                         column(5,
+                                                h3("Key Numbers"),
+                                                h5(textOutput("package_download_num_of_downloads")),
+                                                h5(textOutput("package_download_num_of_country"))
+                                                )
+                                       ),
+                                       
+                                       fluidRow(
+                                         h3("Country Distribution"),
+                                         dataTableOutput("country_distribution"),
+                                         downloadButton("download.summary", "Download Country Distribution Summary"),
+                                         br(),
+                                         br(),
+                                         plotOutput("map_plot")
+                                       )
+
                                        ),
 
                               tabPanel("Pareto Principle (80-20 rule)",
