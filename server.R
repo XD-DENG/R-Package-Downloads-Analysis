@@ -147,8 +147,7 @@ shinyServer(function(input, output) {
   
   # this helps show the example from the data obtained
   output$contents <- renderDataTable({
-    temp <- dat_uploaded()
-    temp
+    dat_uploaded()
   })
   
 #   output$pie_plot <- renderPlot({
@@ -224,7 +223,7 @@ shinyServer(function(input, output) {
     # I combined the lines below to reduce the memory usage
     # tmp <- dat()
     # tmp <- subset(dat(), tmp$package==input$package_name)
-    temp_table <- data.frame(table(as.vector(subset(dat(), tmp$package==input$package_name)$country)))
+    temp_table <- data.frame(table(as.vector(subset(dat(), package==input$package_name)$country)))
     # temp_table <- data.frame(temp_table)
     names(temp_table) <- c("Country.Code", "Num.of.Downloads")
     temp_table[rev(order(temp_table$Num.of.Downloads)),]
