@@ -221,10 +221,11 @@ shinyServer(function(input, output) {
   })
   
   output$country_distribution <- renderDataTable({
-    tmp <- dat()
-    tmp <- subset(tmp, tmp$package==input$package_name)
-    temp_table <- table(as.vector(tmp$country))
-    temp_table <- data.frame(temp_table)
+    # I combined the lines below to reduce the memory usage
+    # tmp <- dat()
+    # tmp <- subset(dat(), tmp$package==input$package_name)
+    temp_table <- data.frame(table(as.vector(subset(dat(), tmp$package==input$package_name)$country)))
+    # temp_table <- data.frame(temp_table)
     names(temp_table) <- c("Country.Code", "Num.of.Downloads")
     temp_table[rev(order(temp_table$Num.of.Downloads)),]
   },
@@ -233,10 +234,11 @@ shinyServer(function(input, output) {
   
   output$download_top10 <- renderTable({
     n=10
+    # several lines below are combined to reduce the memory usage
     tmp_0 <- dat()
-    tmp_1 <- table(tmp_0$package)
-    tmp_2 <- rev(sort(tmp_1))
-    tmp_3 <- tmp_2[1:n]
+#     tmp_1 <- table(tmp_0$package)
+#     tmp_2 <- rev(sort(tmp_1))
+    tmp_3 <- rev(sort(table(tmp_0$package)))[1:n]
     
     result <- data.frame(PackageName = letters[1:n],
                          DownloadNum = 1:n,
@@ -357,9 +359,12 @@ shinyServer(function(input, output) {
   
   to.download <- reactive({
     tmp <- dat()
-    tmp <- subset(tmp, tmp$package==input$package_name)
-    temp_table <- table(as.vector(tmp$country))
-    temp_table <- data.frame(temp_table)
+    
+    # several lines here are combined to reduce memory usage
+    
+    # tmp <- subset(tmp, tmp$package==input$package_name)
+    temp_table <- data.frame(table(as.vector(subset(tmp, tmp$package==input$package_name)$country)))
+    # temp_table <- data.frame(temp_table)
     names(temp_table) <- c("Country.Code", "Num.of.Downloads")
     temp_table[rev(order(temp_table$Num.of.Downloads)),]
   })
